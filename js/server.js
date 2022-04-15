@@ -4,33 +4,23 @@ const closeDownloadError = () => {
   window.location.reload();
 };
 
-const createLoader = (onSuccess, onError) => () => {
-  return fetch(
-    'https://25.javascript.pages.academy/kekstagram/data',
-    {
-      method: 'GET',
-      credentials: 'same-origin',
-    },
-  )
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(`${response.status} ${response.statusText}`);
-    })
-    .then((data) => {
-      //console.log('Результат', data);
-      userPicsContainer.appendChild(onSuccess(data));
-    })
-    .catch((err) => {
-      //console.log('Ошибка', err);
-      userPicsContainer.appendChild(onError(err));
-      document.querySelector('.error__button').addEventListener('click', closeDownloadError);
-    });
-};
-
-
-export {createLoader};
+const createLoader = (onError) => () => fetch(
+  'https://25.javascript.pages.academy/kekstagram/data',
+  {
+    method: 'GET',
+    credentials: 'same-origin',
+  },
+)
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Error(`${response.status} ${response.statusText}`);
+  })
+  .catch((err) => {
+    userPicsContainer.appendChild(onError(err));
+    document.querySelector('.error__button').addEventListener('click', closeDownloadError);
+  });
 
 const raiseDownloadError = () => {
   const fragment = document.createDocumentFragment();
@@ -66,4 +56,4 @@ const raiseUploadSuccess = () => {
 };
 
 export {raiseUploadSuccess};
-
+export const loadImages = createLoader(raiseDownloadError);
