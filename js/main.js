@@ -6,5 +6,9 @@ import './filters.js';
 import './upload.js';
 import {loadImages} from './server.js';
 import {createUsersPic} from './users-pic.js';
+const filtersElement = document.querySelector('.img-filters');
 
-loadImages().then(createUsersPic);
+loadImages().then((pictures) => {
+  createUsersPic(pictures);
+  filtersElement.classList.remove('img-filters--inactive');
+});

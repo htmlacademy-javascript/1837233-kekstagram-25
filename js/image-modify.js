@@ -1,3 +1,6 @@
+const MAX_SCALE = 100;
+const MIN_SCALE = 25;
+const ADJUST_SCALE = 25;
 const scaleUpButton = document.querySelector('.scale__control--bigger');
 const scaleDownButton = document.querySelector('.scale__control--smaller');
 const scaleValue = document.querySelector('.scale__control--value');
@@ -7,6 +10,7 @@ const radioList = document.querySelector('.effects__list');
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 const slider = document.querySelector('.effect-level__slider');
 const sliderInput = document.querySelector('.effect-level__value');
+sliderInput.value = 100;
 
 const setImageScale = (val) => {
   imagePreview.style.transform = `scale(${val/100})`;
@@ -14,16 +18,16 @@ const setImageScale = (val) => {
 
 const onScaleUpClick = () => {
   const scaleVal = Number.parseInt(scaleValue.value, 10);
-  if (scaleVal <= 75 && scaleVal >= 25) {
-    scaleValue.value = `${scaleVal + 25  }%`;
+  if (scaleVal < MAX_SCALE && scaleVal >= MIN_SCALE) {
+    scaleValue.value = `${scaleVal + ADJUST_SCALE  }%`;
     setImageScale(Number.parseInt(scaleValue.value, 10));
   }
 };
 
 const onScaleDownClick = () => {
   const scaleVal = Number.parseInt(scaleValue.value, 10);
-  if (scaleVal <= 100 && scaleVal > 25) {
-    scaleValue.value = `${scaleVal - 25  }%`;
+  if (scaleVal <= MAX_SCALE && scaleVal > MIN_SCALE) {
+    scaleValue.value = `${scaleVal - ADJUST_SCALE  }%`;
     setImageScale(Number.parseInt(scaleValue.value, 10));
   }
 };
@@ -33,8 +37,6 @@ const hideSliderContainer = (param) => {
     sliderContainer.classList.add('visually-hidden');
   }
 };
-
-sliderInput.value = 100;
 
 const setEffectValue = (buttonEffect) => {
   slider.noUiSlider.on('update', () => {
